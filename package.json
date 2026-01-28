@@ -1,0 +1,53 @@
+{
+  "name": "claude-rules-doctor",
+  "version": "0.1.0",
+  "description": "Your Claude Code rules silently fail. We catch them.",
+  "type": "module",
+  "bin": {
+    "rules-doctor": "dist/cli.js",
+    "claude-rules-doctor": "dist/cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rogerz/claude-rules-doctor.git"
+  },
+  "homepage": "https://github.com/rogerz/claude-rules-doctor#readme",
+  "bugs": {
+    "url": "https://github.com/rogerz/claude-rules-doctor/issues"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "claude-code",
+    "claude",
+    "rules",
+    "linter",
+    "cli",
+    "glob",
+    "validation",
+    "dead-rules"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "glob": "^10.3.10",
+    "yaml": "^2.3.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

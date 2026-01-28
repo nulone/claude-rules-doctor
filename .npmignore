@@ -1,0 +1,7 @@
+src/
+test-suite/
+test-project/
+test-project-2/
+test-project-3/
+tsconfig.json
+*.log
