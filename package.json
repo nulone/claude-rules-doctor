@@ -9,11 +9,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rogerz/claude-rules-doctor.git"
+    "url": "git+https://github.com/nulone/claude-rules-doctor.git"
   },
-  "homepage": "https://github.com/rogerz/claude-rules-doctor#readme",
+  "homepage": "https://github.com/nulone/claude-rules-doctor#readme",
   "bugs": {
-    "url": "https://github.com/rogerz/claude-rules-doctor/issues"
+    "url": "https://github.com/nulone/claude-rules-doctor/issues"
   },
   "scripts": {
     "build": "tsc",

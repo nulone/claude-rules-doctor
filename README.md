@@ -8,11 +8,11 @@ CLI that verifies `.claude/rules/*.md` `paths:` globs actually match files in yo
 
 ```bash
 # One-off
-npx claude-rules-doctor check
+npx claude-rules-doctor check --root .
 
 # Or install globally
 npm install -g claude-rules-doctor
-rules-doctor check
+rules-doctor check --root .
 ```
 
 ## Problem
@@ -106,7 +106,7 @@ jobs:
 
 ## Why not cclint?
 
-cclint validates rule structure, but it does not resolve your `paths:` globs to real files. Rules Doctor checks globs against your repo and flags DEAD rules that would otherwise slip through.
+cclint validates frontmatter schema. We validate reality: do your globs actually match files in your repo?
 
 ## License
 
