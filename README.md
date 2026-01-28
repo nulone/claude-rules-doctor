@@ -59,8 +59,16 @@ rules-doctor check --root /path/to/project
 ## Output
 
 - ✅ **OK** — Rule is global (no paths) or paths match files
-- ⚠️ **WARNING** — Paths match files, but there's a known platform bug
+- ⚠️ **WARNING** — Rule misconfigured: invalid YAML frontmatter, empty paths array, invalid types in paths, or invalid glob patterns
 - ❌ **DEAD** — Paths specified, but 0 files match
+
+### WARNING triggers
+
+A rule gets WARNING status when:
+- Invalid YAML in frontmatter
+- Empty paths array (`paths: []`)
+- Non-string values in paths (numbers, booleans, null)
+- Invalid glob patterns
 
 ## Example output (test-suite/6-mixed)
 

@@ -6,6 +6,7 @@ export interface RuleFrontmatter {
 export interface RuleFile {
   filePath: string;
   frontmatter: RuleFrontmatter | null;
+  parseError?: string;
 }
 
 export enum RuleStatus {

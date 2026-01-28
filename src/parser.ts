@@ -14,26 +14,36 @@ export async function findRuleFiles(rootDir: string): Promise<string[]> {
 
 export async function parseRuleFile(filePath: string): Promise<RuleFile> {
   const content = await readFile(filePath, 'utf-8');
-  const frontmatter = extractFrontmatter(content);
+  const result = extractFrontmatter(content);
 
   return {
     filePath,
-    frontmatter,
+    frontmatter: result.frontmatter,
+    parseError: result.parseError,
   };
 }
 
-function extractFrontmatter(content: string): RuleFrontmatter | null {
+function extractFrontmatter(content: string): {
+  frontmatter: RuleFrontmatter | null;
+  parseError?: string
+} {
   const match = content.match(FRONTMATTER_REGEX);
 
   if (!match) {
-    return null;
+    // No frontmatter found - this is a normal global rule
+    return { frontmatter: null };
   }
 
   try {
     const parsed = parseYaml(match[1]);
-    return parsed as RuleFrontmatter;
+    return { frontmatter: parsed as RuleFrontmatter };
   } catch (error) {
-    return null;
+    // Frontmatter found but YAML parsing failed
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return {
+      frontmatter: null,
+      parseError: `YAML parse error: ${errorMessage}`
+    };
   }
 }
 

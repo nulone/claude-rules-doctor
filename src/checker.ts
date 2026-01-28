@@ -6,6 +6,16 @@ export async function checkRule(
   rule: RuleFile,
   rootDir: string
 ): Promise<RuleCheckResult> {
+  // Check for parse errors first
+  if (rule.parseError) {
+    return {
+      rule,
+      status: Status.WARNING,
+      matchedFiles: [],
+      message: rule.parseError,
+    };
+  }
+
   // Global rule (no paths specified)
   if (!rule.frontmatter || !rule.frontmatter.paths) {
     return {
@@ -16,14 +26,29 @@ export async function checkRule(
     };
   }
 
-  const paths = rule.frontmatter.paths;
+  let paths = rule.frontmatter.paths;
 
-  if (!Array.isArray(paths) || paths.length === 0) {
+  // Handle paths as string - convert to array
+  if (typeof paths === 'string') {
+    paths = [paths];
+  }
+
+  // Check if paths is empty array
+  if (!Array.isArray(paths)) {
     return {
       rule,
-      status: Status.OK,
+      status: Status.WARNING,
       matchedFiles: [],
-      message: 'No valid paths array',
+      message: 'Invalid paths type (must be string or array)',
+    };
+  }
+
+  if (paths.length === 0) {
+    return {
+      rule,
+      status: Status.WARNING,
+      matchedFiles: [],
+      message: 'Empty paths array',
     };
   }
 
@@ -39,21 +64,9 @@ export async function checkRule(
     }
   }
 
-  // If there are non-string values, return WARNING
-  if (invalidPaths.length > 0) {
-    const invalidTypes = invalidPaths
-      .map(p => (p === null ? 'null' : typeof p))
-      .join(', ');
-    return {
-      rule,
-      status: Status.WARNING,
-      matchedFiles: [],
-      message: `Invalid types in paths array: ${invalidTypes}. Only strings are allowed.`,
-    };
-  }
-
   // Check each glob pattern
   const allMatches = new Set<string>();
+  const globErrors: string[] = [];
 
   for (const pattern of validPaths) {
     try {
@@ -64,12 +77,36 @@ export async function checkRule(
       });
       matches.forEach(file => allMatches.add(file));
     } catch (error) {
-      // Invalid glob pattern - treat as no matches
-      continue;
+      // Invalid glob pattern - collect error
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      globErrors.push(`"${pattern}": ${errorMsg}`);
     }
   }
 
+  // If all patterns failed, return WARNING with collected errors
+  if (globErrors.length > 0 && allMatches.size === 0) {
+    return {
+      rule,
+      status: Status.WARNING,
+      matchedFiles: [],
+      message: `Invalid glob pattern(s): ${globErrors.join('; ')}`,
+    };
+  }
+
   const matchedFiles = Array.from(allMatches).sort();
+
+  // If there are non-string values, return WARNING (but with matched files if any)
+  if (invalidPaths.length > 0) {
+    const invalidTypes = invalidPaths
+      .map(p => (p === null ? 'null' : typeof p))
+      .join(', ');
+    return {
+      rule,
+      status: Status.WARNING,
+      matchedFiles,
+      message: `Invalid types in paths array: ${invalidTypes}. Only strings are allowed.`,
+    };
+  }
 
   if (matchedFiles.length === 0) {
     return {

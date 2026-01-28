@@ -6,13 +6,14 @@ import { existsSync } from 'fs';
 import { parseAllRules } from './parser.js';
 import { checkAllRules } from './checker.js';
 import { generateReport, printConsoleReport, printJsonReport } from './reporter.js';
+import pkg from '../package.json' with { type: 'json' };
 
 const program = new Command();
 
 program
   .name('rules-doctor')
   .description('CLI for checking .claude/rules/*.md files')
-  .version('1.0.0');
+  .version(pkg.version);
 
 program
   .command('check')
@@ -50,7 +51,7 @@ program
       if (options.json) {
         printJsonReport(report);
       } else {
-        printConsoleReport(report, options.verbose);
+        printConsoleReport(report, options.verbose, rootDir);
       }
 
       // CI mode: exit 1 if dead rules found

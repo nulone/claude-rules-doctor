@@ -1,4 +1,5 @@
 import chalk from 'chalk';
+import path from 'node:path';
 import type { RuleCheckResult, CheckReport } from './types.js';
 import { RuleStatus } from './types.js';
 
@@ -28,13 +29,13 @@ export function generateReport(results: RuleCheckResult[]): CheckReport {
   return report;
 }
 
-export function printConsoleReport(report: CheckReport, verbose: boolean): void {
+export function printConsoleReport(report: CheckReport, verbose: boolean, rootDir: string): void {
   console.log(chalk.bold('\n🔍 Rules Doctor - Check Results\n'));
 
   for (const result of report.results) {
     const statusIcon = getStatusIcon(result.status);
     const statusColor = getStatusColor(result.status);
-    const relativePath = result.rule.filePath;
+    const relativePath = path.relative(rootDir, result.rule.filePath);
 
     console.log(
       `${statusIcon} ${statusColor(result.status.padEnd(7))} ${chalk.gray(relativePath)}`
