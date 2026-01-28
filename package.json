@@ -1,6 +1,6 @@
 {
   "name": "claude-rules-doctor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Your Claude Code rules silently fail. We catch them.",
   "type": "module",
   "bin": {
