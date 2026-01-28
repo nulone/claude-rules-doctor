@@ -1,5 +1,5 @@
 export interface RuleFrontmatter {
-  paths?: string[];
+  paths?: unknown;
   [key: string]: unknown;
 }
 

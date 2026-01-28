@@ -6,7 +6,9 @@ import { existsSync } from 'fs';
 import { parseAllRules } from './parser.js';
 import { checkAllRules } from './checker.js';
 import { generateReport, printConsoleReport, printJsonReport } from './reporter.js';
-import pkg from '../package.json' with { type: 'json' };
+import { createRequire } from 'node:module';
+const require = createRequire(import.meta.url);
+const pkg = require('../package.json');
 
 const program = new Command();
 

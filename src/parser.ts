@@ -7,8 +7,11 @@ import type { RuleFile, RuleFrontmatter } from './types.js';
 const FRONTMATTER_REGEX = /^\s*---\s*\n([\s\S]*?)\n---/;
 
 export async function findRuleFiles(rootDir: string): Promise<string[]> {
-  const pattern = `${rootDir}/.claude/rules/**/*.md`;
-  const files = await glob(pattern, { nodir: true });
+  const files = await glob('.claude/rules/**/*.md', {
+    cwd: rootDir,
+    nodir: true,
+    absolute: true
+  });
   return files;
 }
 
