@@ -1,5 +1,7 @@
 Catch dead Claude rules before they silently do nothing.
 
+[![Mentioned in Awesome Claude Code](https://awesome.re/mentioned-badge.svg)](https://github.com/hesreallyhim/awesome-claude-code)
+
 # 🩺 claude-rules-doctor
 
 CLI that verifies `.claude/rules/*.md` `paths:` globs actually match files in your project.
